@@ -1,14 +1,14 @@
-package com.lab_prog.streaming;
+package com.lab_prog.streaming.Model.Entities;
 
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity 
 @Setter 
 @Getter 
-@AllArgsConstructor 
+@SuperBuilder
 public class Filme extends Midia {
     private int duracaoSegundos;
 }
