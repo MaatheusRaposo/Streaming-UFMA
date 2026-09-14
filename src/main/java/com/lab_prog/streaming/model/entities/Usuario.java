@@ -21,7 +21,7 @@ public class Usuario {
     @Id 
     @GeneratedValue 
     private UUID userId;
-    
+
     private String nome;
     private String email;
 }
