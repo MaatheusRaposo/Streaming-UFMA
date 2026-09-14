@@ -1,9 +1,10 @@
-package com.lab_prog.streaming.Model.Entities;
+package com.lab_prog.streaming.Model.entities;
 
 import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -13,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Getter 
 @SuperBuilder
 public class Midia {
+    @Id 
     private UUID midiaId;
     private String titulo;
     private String sinopse;

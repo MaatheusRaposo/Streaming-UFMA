@@ -1,4 +1,4 @@
-package com.lab_prog.streaming.Model.Entities;
+package com.lab_prog.streaming.Model.entities;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @Setter 
 @Getter 
 @SuperBuilder
-public class Serie {
-    
+public class Serie extends Midia{
+    private int totalTemporadas;
 }

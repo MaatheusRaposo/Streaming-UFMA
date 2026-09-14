@@ -1,4 +1,4 @@
-package com.lab_prog.streaming.Model.Entities;
+package com.lab_prog.streaming.Model.entities;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
