@@ -1,4 +1,4 @@
-package com.lab_prog.streaming.Model.entities;
+package com.lab_prog.streaming.model.entities;
 
 import java.util.UUID;
 
