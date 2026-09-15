@@ -1,4 +1,4 @@
-package com.lab_prog.streaming.repositories;
+package com.lab_prog.streaming.model.repositories;
 
 import java.util.UUID;
 

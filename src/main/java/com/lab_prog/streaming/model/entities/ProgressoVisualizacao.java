@@ -1,9 +1,8 @@
-package com.lab_prog.streaming.Model.entities;
+package com.lab_prog.streaming.model.entities;
 
-import java.util.UUID;
 
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 import java.util.Date;
 
@@ -18,9 +17,8 @@ import lombok.Setter;
 @AllArgsConstructor 
 @NoArgsConstructor 
 public class ProgressoVisualizacao {
-    @Id 
-    private UUID userId;
-    private UUID epID;
+    @EmbeddedId 
+    private ProgressoVisualizacaoId pvId;
     
     private int tempoAssistidoSegundos;
     private Date ultimaVisualizacao;
