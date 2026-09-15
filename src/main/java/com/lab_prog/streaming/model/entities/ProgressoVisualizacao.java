@@ -3,6 +3,9 @@ package com.lab_prog.streaming.model.entities;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 
 import java.util.Date;
 
@@ -19,6 +22,16 @@ import lombok.Setter;
 public class ProgressoVisualizacao {
     @EmbeddedId 
     private ProgressoVisualizacaoId pvId;
+
+    @ManyToOne 
+    @MapsId 
+    @JoinColumn(name="user_id")
+    private Usuario user;
+
+    @ManyToOne 
+    @MapsId 
+    @JoinColumn(name="ep_id")
+    private Episodio ep;
     
     private int tempoAssistidoSegundos;
     private Date ultimaVisualizacao;
