@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository extends JpaRepository<UsuarioRepository, UUID> {
+import com.lab_prog.streaming.model.entities.Usuario;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     
 }
