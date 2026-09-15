@@ -1,10 +1,15 @@
-package com.lab_prog.streaming.Model.entities;
+package com.lab_prog.streaming.model.entities;
 
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.annotation.Generated;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -13,12 +18,17 @@ import lombok.experimental.SuperBuilder;
 @Setter 
 @Getter 
 @SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Midia {
     @Id 
+    @GeneratedValue 
     private UUID midiaId;
+
     private String titulo;
     private String sinopse;
     private int anoLancamento;
     private String urlPoster;
+    
+    @ElementCollection 
     private List<String> generos;
 }
