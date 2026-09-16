@@ -24,12 +24,12 @@ public class ProgressoVisualizacao {
     private ProgressoVisualizacaoId pvId;
 
     @ManyToOne 
-    @MapsId 
+    @MapsId("userId") 
     @JoinColumn(name="user_id")
     private Usuario user;
 
     @ManyToOne 
-    @MapsId 
+    @MapsId("epID") 
     @JoinColumn(name="ep_id")
     private Episodio ep;
     

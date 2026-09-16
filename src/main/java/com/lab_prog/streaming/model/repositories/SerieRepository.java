@@ -1,11 +1,11 @@
-package com.lab_prog.streaming.repositories;
+package com.lab_prog.streaming.model.repositories;
 
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.lab_prog.streaming.Model.entities.Midia;
+import com.lab_prog.streaming.model.entities.Serie;
 
-public interface SerieRepository extends JpaRepository<Midia, UUID> {
+public interface SerieRepository extends JpaRepository<Serie, UUID> {
     
 }
