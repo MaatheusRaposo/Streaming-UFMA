@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter 
 @Getter 
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor 
+@AllArgsConstructor 
 public class Serie extends Midia{
     private int totalTemporadas;
 }

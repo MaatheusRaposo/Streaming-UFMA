@@ -20,9 +20,9 @@ import lombok.experimental.SuperBuilder;
 @Setter 
 @Getter 
 @SuperBuilder
-@Inheritance(strategy = InheritanceType.JOINED)
-@AllArgsConstructor 
 @NoArgsConstructor 
+@AllArgsConstructor 
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Midia {
     @Id 
     @GeneratedValue 
