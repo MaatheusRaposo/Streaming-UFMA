@@ -1,4 +1,4 @@
-package com.lab_prog.streaming.model.repositories;
+package com.lab_prog.streaming.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

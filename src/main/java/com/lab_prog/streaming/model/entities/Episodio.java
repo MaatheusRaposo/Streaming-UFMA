@@ -2,7 +2,6 @@ package com.lab_prog.streaming.model.entities;
 
 import java.util.UUID;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

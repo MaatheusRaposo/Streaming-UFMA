@@ -18,6 +18,12 @@ import com.lab_prog.streaming.model.entities.ProgressoVisualizacaoId;
 import com.lab_prog.streaming.model.entities.Serie;
 import com.lab_prog.streaming.model.entities.Usuario;
 
+import com.lab_prog.streaming.repositories.UsuarioRepository;
+import com.lab_prog.streaming.repositories.EpisodioRepository;
+import com.lab_prog.streaming.repositories.FilmeRepository;
+import com.lab_prog.streaming.repositories.SerieRepository;
+import com.lab_prog.streaming.repositories.ProgressoVisualizacaoRepository;
+
 @DataJpaTest
 class RepositoriesIntegrationTest {
 
