@@ -29,9 +29,9 @@ public class ProgressoVisualizacao {
     private Usuario user;
 
     @ManyToOne 
-    @MapsId("epID") 
-    @JoinColumn(name="ep_id")
-    private Episodio ep;
+    @MapsId("conteudoId")
+    @JoinColumn(name="conteudo_id")
+    private ConteudoAssistivel conteudo;
     
     private int tempoAssistidoSegundos;
     private Date ultimaVisualizacao;

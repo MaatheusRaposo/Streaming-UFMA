@@ -18,6 +18,12 @@ import com.lab_prog.streaming.model.entities.ProgressoVisualizacaoId;
 import com.lab_prog.streaming.model.entities.Serie;
 import com.lab_prog.streaming.model.entities.Usuario;
 
+import com.lab_prog.streaming.repositories.UsuarioRepository;
+import com.lab_prog.streaming.repositories.EpisodioRepository;
+import com.lab_prog.streaming.repositories.FilmeRepository;
+import com.lab_prog.streaming.repositories.SerieRepository;
+import com.lab_prog.streaming.repositories.ProgressoVisualizacaoRepository;
+
 @DataJpaTest
 class RepositoriesIntegrationTest {
 
@@ -42,6 +48,8 @@ class RepositoriesIntegrationTest {
         Usuario usuario = new Usuario();
         usuario.setNome("Marina");
         usuario.setEmail("marina@ufma.br");
+        usuario.setSenhaHash("hash-de-teste");
+
 
         Usuario salvo = usuarioRepository.save(usuario);
 
@@ -61,11 +69,16 @@ class RepositoriesIntegrationTest {
         episodio.setDuracaoSegundos(3600);
         episodio.setTitulo("Início de Tudo");
         episodio.setUrl("https://streaming.ufma.br/ep1.mp4");
+        Serie serie = new Serie();
+        serie.setTitulo("Série de Teste");
+        serie.setTotalTemporadas(1);
+        serie = serieRepository.save(serie);
+        episodio.setSerie(serie);
 
         Episodio salvo = episodioRepository.save(episodio);
 
-        assertThat(salvo.getEpId()).isNotNull();
-        Optional<Episodio> encontrado = episodioRepository.findById(salvo.getEpId());
+        assertThat(salvo.getMidiaId()).isNotNull();
+        Optional<Episodio> encontrado = episodioRepository.findById(salvo.getMidiaId());
         assertThat(encontrado).isPresent();
         assertThat(encontrado.get().getTitulo()).isEqualTo("Início de Tudo");
     }
@@ -116,7 +129,13 @@ class RepositoriesIntegrationTest {
         Usuario usuario = new Usuario();
         usuario.setNome("Lucas");
         usuario.setEmail("lucas@ufma.br");
+        usuario.setSenhaHash("hash-de-teste");
         usuario = usuarioRepository.save(usuario);
+
+        Serie serie = new Serie();
+        serie.setTitulo("Série de Progresso");
+        serie.setTotalTemporadas(1);
+        serie = serieRepository.save(serie);
 
         Episodio episodio = new Episodio();
         episodio.setTemporada(1);
@@ -124,13 +143,14 @@ class RepositoriesIntegrationTest {
         episodio.setDuracaoSegundos(2500);
         episodio.setTitulo("A Revelação");
         episodio.setUrl("https://streaming.ufma.br/ep3.mp4");
+        episodio.setSerie(serie);
         episodio = episodioRepository.save(episodio);
 
-        ProgressoVisualizacaoId pvId = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getEpId());
+        ProgressoVisualizacaoId pvId = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getMidiaId());
         ProgressoVisualizacao progresso = new ProgressoVisualizacao();
         progresso.setPvId(pvId);
         progresso.setUser(usuario);
-        progresso.setEp(episodio);
+        progresso.setConteudo(episodio);
         progresso.setTempoAssistidoSegundos(1500);
         progresso.setUltimaVisualizacao(new Date());
         progresso.setConcluido(false);
@@ -141,6 +161,6 @@ class RepositoriesIntegrationTest {
         assertThat(encontrado).isPresent();
         assertThat(encontrado.get().getTempoAssistidoSegundos()).isEqualTo(1500);
         assertThat(encontrado.get().getUser().getUserId()).isEqualTo(usuario.getUserId());
-        assertThat(encontrado.get().getEp().getEpId()).isEqualTo(episodio.getEpId());
+        assertThat(encontrado.get().getConteudo().getMidiaId()).isEqualTo(episodio.getMidiaId());
     }
 }
