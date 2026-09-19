@@ -9,6 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +34,12 @@ public class Midia {
     private String sinopse;
     private int anoLancamento;
     private String urlPoster;
-    
+
     @ElementCollection 
     private List<String> generos;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @lombok.Builder.Default
+    private StatusMidia status = StatusMidia.ATIVA;
 }
