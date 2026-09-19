@@ -20,20 +20,20 @@ class ProgressoVisualizacaoTest {
         void deveInstanciarComConstrutorPadraoESetters() {
             ProgressoVisualizacao progresso = new ProgressoVisualizacao();
             Usuario usuario = new Usuario(UUID.randomUUID(), "Alice", "alice@example.com","hash-de-teste");
-            Episodio episodio = new Episodio(UUID.randomUUID(), 1, 1, 3600, "Ep 1", "https://ep1.mp4");
-            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getEpId());
+            Episodio episodio = Episodio.builder().midiaId(UUID.randomUUID()).temporada(1).numero(1).duracaoSegundos(3600).titulo("Ep 1").url("https://ep1.mp4").build();
+            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getMidiaId());
             Date agora = new Date();
 
             progresso.setPvId(id);
             progresso.setUser(usuario);
-            progresso.setEp(episodio);
+            progresso.setConteudo(episodio);
             progresso.setTempoAssistidoSegundos(1800);
             progresso.setUltimaVisualizacao(agora);
             progresso.setConcluido(false);
 
             assertThat(progresso.getPvId()).isEqualTo(id);
             assertThat(progresso.getUser()).isEqualTo(usuario);
-            assertThat(progresso.getEp()).isEqualTo(episodio);
+            assertThat(progresso.getConteudo()).isEqualTo(episodio);
             assertThat(progresso.getTempoAssistidoSegundos()).isEqualTo(1800);
             assertThat(progresso.getUltimaVisualizacao()).isEqualTo(agora);
             assertThat(progresso.isConcluido()).isFalse();
@@ -43,8 +43,8 @@ class ProgressoVisualizacaoTest {
         @DisplayName("Deve instanciar com construtor com todos os argumentos")
         void deveInstanciarComTodosOsArgumentos() {
             Usuario usuario = new Usuario(UUID.randomUUID(), "Bob", "bob@example.com","hash-de-teste");
-            Episodio episodio = new Episodio(UUID.randomUUID(), 1, 2, 2400, "Ep 2", "https://ep2.mp4");
-            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getEpId());
+            Episodio episodio = Episodio.builder().midiaId(UUID.randomUUID()).temporada(1).numero(2).duracaoSegundos(2400).titulo("Ep 2").url("https://ep2.mp4").build();
+            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getMidiaId());
             Date agora = new Date();
 
             ProgressoVisualizacao progresso = new ProgressoVisualizacao(
@@ -53,7 +53,7 @@ class ProgressoVisualizacaoTest {
 
             assertThat(progresso.getPvId()).isEqualTo(id);
             assertThat(progresso.getUser()).isEqualTo(usuario);
-            assertThat(progresso.getEp()).isEqualTo(episodio);
+            assertThat(progresso.getConteudo()).isEqualTo(episodio);
             assertThat(progresso.getTempoAssistidoSegundos()).isEqualTo(1200);
             assertThat(progresso.getUltimaVisualizacao()).isEqualTo(agora);
             assertThat(progresso.isConcluido()).isFalse();
@@ -87,4 +87,3 @@ class ProgressoVisualizacaoTest {
         }
     }
 }
-

@@ -19,24 +19,24 @@ class ProgressoVisualizacaoIdTest {
         void deveInstanciarComConstrutorPadraoESetters() {
             ProgressoVisualizacaoId id = new ProgressoVisualizacaoId();
             UUID userId = UUID.randomUUID();
-            UUID epId = UUID.randomUUID();
+            UUID conteudoId = UUID.randomUUID();
 
             id.setUserId(userId);
-            id.setEpID(epId);
+            id.setConteudoId(conteudoId);
 
             assertThat(id.getUserId()).isEqualTo(userId);
-            assertThat(id.getEpID()).isEqualTo(epId);
+            assertThat(id.getConteudoId()).isEqualTo(conteudoId);
         }
 
         @Test
         @DisplayName("Deve instanciar chave composta com construtor completo")
         void deveInstanciarComTodosOsArgumentos() {
             UUID userId = UUID.randomUUID();
-            UUID epId = UUID.randomUUID();
-            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(userId, epId);
+            UUID conteudoId = UUID.randomUUID();
+            ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(userId, conteudoId);
 
             assertThat(id.getUserId()).isEqualTo(userId);
-            assertThat(id.getEpID()).isEqualTo(epId);
+            assertThat(id.getConteudoId()).isEqualTo(conteudoId);
         }
     }
 
@@ -48,10 +48,10 @@ class ProgressoVisualizacaoIdTest {
         @DisplayName("Instâncias com mesmos valores devem ser iguais e possuir o mesmo hashCode")
         void deveSerIgualQuandoPossuirMesmosValores() {
             UUID userId = UUID.randomUUID();
-            UUID epId = UUID.randomUUID();
+            UUID conteudoId = UUID.randomUUID();
 
-            ProgressoVisualizacaoId id1 = new ProgressoVisualizacaoId(userId, epId);
-            ProgressoVisualizacaoId id2 = new ProgressoVisualizacaoId(userId, epId);
+            ProgressoVisualizacaoId id1 = new ProgressoVisualizacaoId(userId, conteudoId);
+            ProgressoVisualizacaoId id2 = new ProgressoVisualizacaoId(userId, conteudoId);
 
             assertThat(id1).isEqualTo(id2);
             assertThat(id1.hashCode()).isEqualTo(id2.hashCode());
@@ -62,14 +62,13 @@ class ProgressoVisualizacaoIdTest {
         void naoDeveSerIgualQuandoPossuirValoresDiferentes() {
             UUID userId1 = UUID.randomUUID();
             UUID userId2 = UUID.randomUUID();
-            UUID epId = UUID.randomUUID();
+            UUID conteudoId = UUID.randomUUID();
 
-            ProgressoVisualizacaoId id1 = new ProgressoVisualizacaoId(userId1, epId);
-            ProgressoVisualizacaoId id2 = new ProgressoVisualizacaoId(userId2, epId);
+            ProgressoVisualizacaoId id1 = new ProgressoVisualizacaoId(userId1, conteudoId);
+            ProgressoVisualizacaoId id2 = new ProgressoVisualizacaoId(userId2, conteudoId);
 
             assertThat(id1).isNotEqualTo(id2);
             assertThat(id1.hashCode()).isNotEqualTo(id2.hashCode());
         }
     }
 }
-
