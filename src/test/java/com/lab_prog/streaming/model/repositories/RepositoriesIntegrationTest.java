@@ -48,6 +48,8 @@ class RepositoriesIntegrationTest {
         Usuario usuario = new Usuario();
         usuario.setNome("Marina");
         usuario.setEmail("marina@ufma.br");
+        usuario.setSenhaHash("hash-de-teste");
+
 
         Usuario salvo = usuarioRepository.save(usuario);
 

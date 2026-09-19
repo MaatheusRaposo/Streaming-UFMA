@@ -19,7 +19,7 @@ class ProgressoVisualizacaoTest {
         @DisplayName("Deve instanciar com construtor padrão e atribuir campos via setters")
         void deveInstanciarComConstrutorPadraoESetters() {
             ProgressoVisualizacao progresso = new ProgressoVisualizacao();
-            Usuario usuario = new Usuario(UUID.randomUUID(), "Alice", "alice@example.com");
+            Usuario usuario = new Usuario(UUID.randomUUID(), "Alice", "alice@example.com","hash-de-teste");
             Episodio episodio = new Episodio(UUID.randomUUID(), 1, 1, 3600, "Ep 1", "https://ep1.mp4");
             ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getEpId());
             Date agora = new Date();
@@ -42,7 +42,7 @@ class ProgressoVisualizacaoTest {
         @Test
         @DisplayName("Deve instanciar com construtor com todos os argumentos")
         void deveInstanciarComTodosOsArgumentos() {
-            Usuario usuario = new Usuario(UUID.randomUUID(), "Bob", "bob@example.com");
+            Usuario usuario = new Usuario(UUID.randomUUID(), "Bob", "bob@example.com","hash-de-teste");
             Episodio episodio = new Episodio(UUID.randomUUID(), 1, 2, 2400, "Ep 2", "https://ep2.mp4");
             ProgressoVisualizacaoId id = new ProgressoVisualizacaoId(usuario.getUserId(), episodio.getEpId());
             Date agora = new Date();
