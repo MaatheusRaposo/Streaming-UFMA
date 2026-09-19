@@ -1,14 +1,13 @@
 package com.lab_prog.streaming.model.entities;
 
-import java.util.UUID;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 
 @Entity 
@@ -16,14 +15,12 @@ import lombok.Setter;
 @AllArgsConstructor 
 @Getter 
 @Setter 
-public class Episodio {
-    @Id 
-    @GeneratedValue 
-    private UUID epId;
-
+@SuperBuilder
+public class Episodio extends ConteudoAssistivel {
     private int temporada;
     private int numero;
-    private int duracaoSegundos;
-    private String titulo;
-    private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "serie_id", nullable = false)
+    private Serie serie;
 }
