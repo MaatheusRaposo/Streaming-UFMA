@@ -19,5 +19,5 @@ import lombok.Setter;
 @AllArgsConstructor 
 public class ProgressoVisualizacaoId implements Serializable {
     private UUID userId;
-    private UUID epID;
+    private UUID conteudoId;
 }
