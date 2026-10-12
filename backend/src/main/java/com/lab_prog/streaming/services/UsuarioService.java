@@ -3,28 +3,41 @@ package com.lab_prog.streaming.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.lab_prog.streaming.dtos.usuario.CadastroUsuarioRequest;
+import com.lab_prog.streaming.dtos.usuario.LoginRequest;
+import com.lab_prog.streaming.dtos.usuario.LoginResponse;
+import com.lab_prog.streaming.dtos.usuario.RefreshRequest;
 import com.lab_prog.streaming.dtos.usuario.UsuarioResponse;
 import com.lab_prog.streaming.model.entities.Usuario;
 import com.lab_prog.streaming.repositories.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
+    @Transactional 
     public UsuarioResponse cadastrar(CadastroUsuarioRequest request) {
         if (usuarioRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("E-mail já cadastrado");
+             throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Este e-mail já está cadastrado"
+            );
         }
 
         Usuario usuario = new Usuario();
@@ -35,6 +48,38 @@ public class UsuarioService {
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         return converterParaResponse(usuarioSalvo);
+    }
+
+    public LoginResponse login(LoginRequest request){
+        Usuario usuario = usuarioRepository.findByEmail(request.email())
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.UNAUTHORIZED, "Email não Cadastrado"
+        ));
+
+        if(!passwordEncoder.matches(usuario.getSenhaHash(), request.senha())){
+            throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Senha Incorreta"
+            );
+        }
+
+        String accToken = jwtService.gerarAccessToken(request.email());
+        String refToken = jwtService.gerarRefreshToken(request.email());
+        UsuarioResponse usuarioResponse = converterParaResponse(usuario);
+
+        return new LoginResponse(accToken, refToken, usuarioResponse);
+    }
+
+    public LoginResponse refresh(RefreshRequest request){
+        String email = jwtService.validarRefreshToken(request.refreshToken());
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Credenciais inválidas"
+            ));
+
+        String newAccessToken = jwtService.gerarAccessToken(usuario.getEmail());
+
+        return new LoginResponse(newAccessToken, request.refreshToken(), converterParaResponse(usuario));
     }
 
     public UsuarioResponse buscarPorId(UUID userId) {
