@@ -1,0 +1,10 @@
+.env
+.env.*
+target/
+.vscode/
+.idea/
+*.iml
+node_modules/
+.next/
+out/
+
