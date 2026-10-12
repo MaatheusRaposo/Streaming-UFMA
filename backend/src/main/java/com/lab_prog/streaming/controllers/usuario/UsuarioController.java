@@ -18,6 +18,9 @@ import com.lab_prog.streaming.dtos.usuario.UsuarioResponse;
 import com.lab_prog.streaming.services.UsuarioService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/usuario")
@@ -56,5 +59,11 @@ public class UsuarioController {
     public ResponseEntity<Void> logout() {
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/me")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
     
 }

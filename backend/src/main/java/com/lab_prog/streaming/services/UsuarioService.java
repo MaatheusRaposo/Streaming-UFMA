@@ -56,7 +56,7 @@ public class UsuarioService {
             HttpStatus.UNAUTHORIZED, "Email não Cadastrado"
         ));
 
-        if(!passwordEncoder.matches(usuario.getSenhaHash(), request.senha())){
+        if(!passwordEncoder.matches( request.senha(), usuario.getSenhaHash())){
             throw new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Senha Incorreta"
             );

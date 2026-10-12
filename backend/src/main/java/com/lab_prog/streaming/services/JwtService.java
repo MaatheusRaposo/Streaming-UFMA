@@ -8,6 +8,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -46,6 +47,23 @@ public class JwtService {
                 .compact();
     }
 
+    public String validarAccessToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        String tipo = claims.get("token_type", String.class);
+
+        if (!"access".equals(tipo)) {
+            throw new IllegalArgumentException(
+                    "Token não é um access token"
+            );
+        }
+
+        return claims.getSubject();
+    }
     
     public String validarRefreshToken(String token) {
         var claims = Jwts.parser()
