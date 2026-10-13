@@ -32,13 +32,13 @@ class SerieServiceTest {
     @DisplayName("Deve cadastrar uma série")
     void deveCadastrarSerie() {
         CadastroSerieRequest request = new CadastroSerieRequest(
-                "Breaking Bad", "Um professor de química...", LocalDate.now(), "poster", List.of("Drama"), 5);
+                "Clone Wars", "Há muito tempo, em uma galáxia muito distante...", LocalDate.now(), "poster", List.of("Ficção"), 7);
 
         SerieResponse response = serieService.cadastrar(request);
 
         Serie serieSalva = serieRepository.findById(response.midiaId()).orElseThrow();
-        assertThat(serieSalva.getTitulo()).isEqualTo("Breaking Bad");
-        assertThat(serieSalva.getTotalTemporadas()).isEqualTo(5);
+        assertThat(serieSalva.getTitulo()).isEqualTo("Clone Wars");
+        assertThat(serieSalva.getTotalTemporadas()).isEqualTo(7);
         assertThat(serieSalva.getStatus()).isEqualTo(StatusMidia.ATIVA);
     }
 

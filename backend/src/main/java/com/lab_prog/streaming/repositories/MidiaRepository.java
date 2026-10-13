@@ -16,9 +16,10 @@ public interface MidiaRepository extends JpaRepository<Midia, UUID>, JpaSpecific
     List<Midia> findByStatus(StatusMidia status);
     List<Midia> findByStatusAndTituloContainingIgnoreCase(StatusMidia status, String titulo);
     List<Midia> findByStatus(StatusMidia status, Pageable pageable);
-    List<Midia> findByStatusOrderByAnoLancamentoDesc(StatusMidia status, Pageable pageable);
+    
+    List<Midia> findByStatusOrderByDataLancamentoDesc(StatusMidia status, Pageable pageable);
 
-    List<Midia> findByDestaqueTrueAndStatus( StatusMidia status ); 
+    List<Midia> findByDestaqueTrueAndStatus(StatusMidia status); 
     
     List<Midia> findByStatusOrderByVisualizacoesDesc(StatusMidia status);
 
@@ -28,6 +29,6 @@ public interface MidiaRepository extends JpaRepository<Midia, UUID>, JpaSpecific
         StatusMidia status
     );
 
-    @Query("SELECT m FROM Midia m WHERE m.status = :status ORDER BY m.anoLancamento DESC")
+    @Query("SELECT m FROM Midia m WHERE m.status = :status ORDER BY m.dataLancamento DESC")
     List<Midia> findTopLancamentos(StatusMidia status, Pageable pageable);
 }

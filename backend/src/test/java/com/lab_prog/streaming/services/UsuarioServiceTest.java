@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.lab_prog.streaming.config.PasswordConfig;
 import com.lab_prog.streaming.dtos.usuario.CadastroUsuarioRequest;
@@ -17,7 +18,7 @@ import com.lab_prog.streaming.model.entities.Usuario;
 import com.lab_prog.streaming.repositories.UsuarioRepository;
 
 @DataJpaTest
-@Import({UsuarioService.class, PasswordConfig.class})
+@Import({ UsuarioService.class, PasswordConfig.class, JwtService.class })
 class UsuarioServiceTest {
 
     @Autowired
@@ -50,8 +51,11 @@ class UsuarioServiceTest {
         usuarioService.cadastrar(request);
 
         assertThatThrownBy(() -> usuarioService.cadastrar(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("E-mail já cadastrado");
+                .isInstanceOfSatisfying(ResponseStatusException.class, ex -> {
+                    assertThat(ex.getStatusCode().value()).isEqualTo(409);
+                    assertThat(ex.getReason())
+                            .isEqualTo("Este e-mail já está cadastrado");
+                });
     }
 
     @Test
