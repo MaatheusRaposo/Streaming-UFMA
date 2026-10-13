@@ -2,6 +2,7 @@ package com.lab_prog.streaming.model.entities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class SerieTest {
+
+    LocalDate agora = LocalDate.now();
 
     @Test
     @DisplayName("Deve instanciar Série utilizando o SuperBuilder com atributos próprios e herdados")
@@ -20,7 +23,7 @@ class SerieTest {
                 .midiaId(id)
                 .titulo("Breaking Bad")
                 .sinopse("Um professor de química se torna um produtor de metanfetamina...")
-                .anoLancamento(2008)
+                .dataLancamento(agora)
                 .urlPoster("https://streaming.ufma.br/posters/breaking_bad.jpg")
                 .generos(generos)
                 .totalTemporadas(5)
@@ -30,7 +33,7 @@ class SerieTest {
         assertThat(serie.getMidiaId()).isEqualTo(id);
         assertThat(serie.getTitulo()).isEqualTo("Breaking Bad");
         assertThat(serie.getSinopse()).isEqualTo("Um professor de química se torna um produtor de metanfetamina...");
-        assertThat(serie.getAnoLancamento()).isEqualTo(2008);
+        assertThat(serie.getDataLancamento()).isEqualTo(agora);
         assertThat(serie.getUrlPoster()).isEqualTo("https://streaming.ufma.br/posters/breaking_bad.jpg");
         assertThat(serie.getGeneros()).containsExactly("Drama", "Suspense");
         assertThat(serie.getTotalTemporadas()).isEqualTo(5);
@@ -45,13 +48,13 @@ class SerieTest {
         serie.setMidiaId(id);
         serie.setTitulo("Dark");
         serie.setSinopse("Desaparecimentos de crianças expõem segredos e conexões temporais.");
-        serie.setAnoLancamento(2017);
+        serie.setDataLancamento(agora);
         serie.setTotalTemporadas(3);
 
         assertThat(serie.getMidiaId()).isEqualTo(id);
         assertThat(serie.getTitulo()).isEqualTo("Dark");
         assertThat(serie.getSinopse()).isEqualTo("Desaparecimentos de crianças expõem segredos e conexões temporais.");
-        assertThat(serie.getAnoLancamento()).isEqualTo(2017);
+        assertThat(serie.getDataLancamento()).isEqualTo(agora);
         assertThat(serie.getTotalTemporadas()).isEqualTo(3);
     }
 }

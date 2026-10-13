@@ -2,6 +2,7 @@ package com.lab_prog.streaming.model.entities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class FilmeTest {
+
+    LocalDate agora = LocalDate.now();
 
     @Test
     @DisplayName("Deve instanciar Filme utilizando o SuperBuilder com atributos próprios e herdados")
@@ -20,7 +23,7 @@ class FilmeTest {
                 .midiaId(id)
                 .titulo("Matrix")
                 .sinopse("Um hacker descobre a verdadeira natureza da sua realidade...")
-                .anoLancamento(1999)
+                .dataLancamento(agora)
                 .urlPoster("https://streaming.ufma.br/posters/matrix.jpg")
                 .generos(generos)
                 .duracaoSegundos(8160)
@@ -30,7 +33,7 @@ class FilmeTest {
         assertThat(filme.getMidiaId()).isEqualTo(id);
         assertThat(filme.getTitulo()).isEqualTo("Matrix");
         assertThat(filme.getSinopse()).isEqualTo("Um hacker descobre a verdadeira natureza da sua realidade...");
-        assertThat(filme.getAnoLancamento()).isEqualTo(1999);
+        assertThat(filme.getDataLancamento()).isEqualTo(agora);
         assertThat(filme.getUrlPoster()).isEqualTo("https://streaming.ufma.br/posters/matrix.jpg");
         assertThat(filme.getGeneros()).containsExactly("Ação", "Aventura");
         assertThat(filme.getDuracaoSegundos()).isEqualTo(8160);
@@ -45,13 +48,13 @@ class FilmeTest {
         filme.setMidiaId(id);
         filme.setTitulo("Gladiador");
         filme.setSinopse("Um general romano se torna gladiador...");
-        filme.setAnoLancamento(2000);
+        filme.setDataLancamento(agora);
         filme.setDuracaoSegundos(9300);
 
         assertThat(filme.getMidiaId()).isEqualTo(id);
         assertThat(filme.getTitulo()).isEqualTo("Gladiador");
         assertThat(filme.getSinopse()).isEqualTo("Um general romano se torna gladiador...");
-        assertThat(filme.getAnoLancamento()).isEqualTo(2000);
+        assertThat(filme.getDataLancamento()).isEqualTo(agora);
         assertThat(filme.getDuracaoSegundos()).isEqualTo(9300);
     }
 }

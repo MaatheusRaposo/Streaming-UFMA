@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.dtos.midia;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ public record MidiaResponse(
         String tipo,
         String titulo,
         String sinopse,
-        Integer anoLancamento,
+        LocalDate dataLancamento,
         String urlPoster,
         List<String> generos,
         StatusMidia status

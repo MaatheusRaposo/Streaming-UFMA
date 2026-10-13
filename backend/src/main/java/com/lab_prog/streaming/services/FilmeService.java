@@ -62,7 +62,7 @@ public class FilmeService {
     private void copiarDados(CadastroFilmeRequest request, Filme filme) {
         filme.setTitulo(request.titulo());
         filme.setSinopse(request.sinopse());
-        filme.setAnoLancamento(request.anoLancamento());
+        filme.setDataLancamento(request.dataLancamento());
         filme.setUrlPoster(request.urlPoster());
         filme.setGeneros(new ArrayList<>(request.generos()));
         filme.setDuracaoSegundos(request.duracaoSegundos());
@@ -71,7 +71,7 @@ public class FilmeService {
     private void copiarDados(AtualizarFilmeRequest request, Filme filme) {
         filme.setTitulo(request.titulo());
         filme.setSinopse(request.sinopse());
-        filme.setAnoLancamento(request.anoLancamento());
+        filme.setDataLancamento(request.dataLancamento());
         filme.setUrlPoster(request.urlPoster());
         filme.setGeneros(new ArrayList<>(request.generos()));
         filme.setDuracaoSegundos(request.duracaoSegundos());
@@ -82,7 +82,7 @@ public class FilmeService {
                 filme.getMidiaId(),
                 filme.getTitulo(),
                 filme.getSinopse(),
-                filme.getAnoLancamento(),
+                filme.getDataLancamento(),
                 filme.getUrlPoster(),
                 filme.getGeneros(),
                 filme.getDuracaoSegundos(),

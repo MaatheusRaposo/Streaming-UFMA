@@ -2,6 +2,7 @@ package com.lab_prog.streaming.model.entities;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MidiaTest {
+
+    LocalDate agora = LocalDate.now();
 
     @Test
     @DisplayName("Deve instanciar mídia através do SuperBuilder")
@@ -21,7 +24,7 @@ class MidiaTest {
                 .midiaId(id)
                 .titulo("Inception")
                 .sinopse("Um ladrão invade os sonhos dos outros...")
-                .anoLancamento(2010)
+                .dataLancamento(agora)
                 .urlPoster("https://streaming.ufma.br/posters/inception.jpg")
                 .generos(generos)
                 .build();
@@ -29,7 +32,7 @@ class MidiaTest {
         assertThat(midia.getMidiaId()).isEqualTo(id);
         assertThat(midia.getTitulo()).isEqualTo("Inception");
         assertThat(midia.getSinopse()).isEqualTo("Um ladrão invade os sonhos dos outros...");
-        assertThat(midia.getAnoLancamento()).isEqualTo(2010);
+        assertThat(midia.getDataLancamento()).isEqualTo(agora);
         assertThat(midia.getUrlPoster()).isEqualTo("https://streaming.ufma.br/posters/inception.jpg");
         assertThat(midia.getGeneros()).containsExactly("Ação", "Ficção Científica");
     }
@@ -45,14 +48,14 @@ class MidiaTest {
         midia.setMidiaId(id);
         midia.setTitulo("Interestelar");
         midia.setSinopse("Exploradores viajam pelo buraco de minhoca no espaço.");
-        midia.setAnoLancamento(2014);
+        midia.setDataLancamento(agora);
         midia.setUrlPoster("https://streaming.ufma.br/posters/interstellar.jpg");
         midia.setGeneros(generos);
 
         assertThat(midia.getMidiaId()).isEqualTo(id);
         assertThat(midia.getTitulo()).isEqualTo("Interestelar");
         assertThat(midia.getSinopse()).isEqualTo("Exploradores viajam pelo buraco de minhoca no espaço.");
-        assertThat(midia.getAnoLancamento()).isEqualTo(2014);
+        assertThat(midia.getDataLancamento()).isEqualTo(agora);
         assertThat(midia.getUrlPoster()).isEqualTo("https://streaming.ufma.br/posters/interstellar.jpg");
         assertThat(midia.getGeneros()).containsExactly("Drama");
     }

@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.dtos.serie;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.validation.constraints.Min;
@@ -17,8 +18,7 @@ public record CadastroSerieRequest(
         String sinopse,
 
         @NotNull(message = "O ano de lançamento é obrigatório")
-        @Min(value = 1888, message = "O ano de lançamento é inválido")
-        Integer anoLancamento,
+        LocalDate dataLancamento,
 
         @NotBlank(message = "A URL do pôster é obrigatória")
         String urlPoster,

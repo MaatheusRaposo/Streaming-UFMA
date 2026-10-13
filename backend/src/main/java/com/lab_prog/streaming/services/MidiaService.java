@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,13 +45,44 @@ public class MidiaService {
                 .toList();
     }
 
+    public List<MidiaResponse> listarDestaques() {
+        return midiaRepository
+                .findByDestaqueTrueAndStatus(StatusMidia.ATIVA)
+                .stream()
+                .map(this::converterParaResponse)
+                .toList();
+    }
+
+    public List<MidiaResponse> listarEmAlta() {
+        return midiaRepository
+                .findByStatusOrderByVisualizacoesDesc(StatusMidia.ATIVA)
+                .stream()
+                .map(this::converterParaResponse)
+                .toList();
+    }
+
+    public List<MidiaResponse> listarLancamentos() {
+        LocalDate hoje = LocalDate.now();
+        LocalDate inicio = hoje.minusDays(30);
+
+        return midiaRepository
+                .findByDataLancamentoBetweenAndStatusOrderByDataLancamentoDesc(
+                    inicio,
+                    hoje,
+                    StatusMidia.ATIVA
+                )
+                .stream()
+                .map(this::converterParaResponse)
+                .toList();
+    }
+
     private MidiaResponse converterParaResponse(Midia midia) {
         return new MidiaResponse(
                 midia.getMidiaId(),
                 midia.getClass().getSimpleName(),
                 midia.getTitulo(),
                 midia.getSinopse(),
-                midia.getAnoLancamento(),
+                midia.getDataLancamento(),
                 midia.getUrlPoster(),
                 midia.getGeneros(),
                 midia.getStatus()
