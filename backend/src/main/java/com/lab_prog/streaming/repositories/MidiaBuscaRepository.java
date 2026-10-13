@@ -23,5 +23,5 @@ public interface MidiaBuscaRepository extends JpaRepository<Midia, UUID> {
 
     List<Midia> findTop30ByStatusAndTituloStartingWithIgnoreCaseOrderByTituloAsc(StatusMidia status, String prefixo);
 
-    List<Midia> findTop50ByStatusOrderByAnoLancamentoDesc(StatusMidia status);
+    List<Midia> findTop50ByStatusAndDataLancamentoIsNotNullOrderByDataLancamentoDesc(StatusMidia status);
 }
