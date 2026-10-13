@@ -62,7 +62,7 @@ public class SerieService {
     private void copiarDados(CadastroSerieRequest request, Serie serie) {
         serie.setTitulo(request.titulo());
         serie.setSinopse(request.sinopse());
-        serie.setAnoLancamento(request.anoLancamento());
+        serie.setDataLancamento(request.dataLancamento());
         serie.setUrlPoster(request.urlPoster());
         serie.setGeneros(new ArrayList<>(request.generos()));
         serie.setTotalTemporadas(request.totalTemporadas());
@@ -71,7 +71,7 @@ public class SerieService {
     private void copiarDados(AtualizarSerieRequest request, Serie serie) {
         serie.setTitulo(request.titulo());
         serie.setSinopse(request.sinopse());
-        serie.setAnoLancamento(request.anoLancamento());
+        serie.setDataLancamento(request.dataLancamento());
         serie.setUrlPoster(request.urlPoster());
         serie.setGeneros(new ArrayList<>(request.generos()));
         serie.setTotalTemporadas(request.totalTemporadas());
@@ -82,7 +82,7 @@ public class SerieService {
                 serie.getMidiaId(),
                 serie.getTitulo(),
                 serie.getSinopse(),
-                serie.getAnoLancamento(),
+                serie.getDataLancamento(),
                 serie.getUrlPoster(),
                 serie.getGeneros(),
                 serie.getTotalTemporadas(),

@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ class SerieServiceTest {
     @DisplayName("Deve cadastrar uma série")
     void deveCadastrarSerie() {
         CadastroSerieRequest request = new CadastroSerieRequest(
-                "Breaking Bad", "Um professor de química...", 2008, "poster", List.of("Drama"), 5);
+                "Breaking Bad", "Um professor de química...", LocalDate.now(), "poster", List.of("Drama"), 5);
 
         SerieResponse response = serieService.cadastrar(request);
 
@@ -47,7 +48,7 @@ class SerieServiceTest {
         Serie serie = Serie.builder().titulo("Antiga").status(StatusMidia.ATIVA).build();
         Serie salva = serieRepository.save(serie);
         AtualizarSerieRequest request = new AtualizarSerieRequest(
-                "Nova", "Sinopse nova", 2024, "novo-poster", List.of("Suspense"), 3);
+                "Nova", "Sinopse nova", LocalDate.now(), "novo-poster", List.of("Suspense"), 3);
 
         SerieResponse response = serieService.atualizar(salva.getMidiaId(), request);
 

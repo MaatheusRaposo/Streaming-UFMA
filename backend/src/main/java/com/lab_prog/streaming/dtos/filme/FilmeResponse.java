@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.dtos.filme;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +10,7 @@ public record FilmeResponse(
         UUID midiaId,
         String titulo,
         String sinopse,
-        Integer anoLancamento,
+        LocalDate dataLancamento,
         String urlPoster,
         List<String> generos,
         Integer duracaoSegundos,

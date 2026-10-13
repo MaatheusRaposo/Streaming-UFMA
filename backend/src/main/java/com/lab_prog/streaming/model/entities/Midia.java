@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.model.entities;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +33,17 @@ public class Midia {
 
     private String titulo;
     private String sinopse;
-    private int anoLancamento;
     private String urlPoster;
+
+    @Column(nullable = false)
+    @lombok.Builder.Default
+    private boolean destaque = false;
+
+    private LocalDate dataLancamento;
+
+    @Column(nullable = false)
+    @lombok.Builder.Default
+    private long visualizacoes = 0L;
 
     @ElementCollection 
     private List<String> generos;

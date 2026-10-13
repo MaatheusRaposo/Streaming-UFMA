@@ -2,6 +2,7 @@ package com.lab_prog.streaming.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ class FilmeServiceTest {
     @Test
     @DisplayName("Deve cadastrar um filme")
     void deveCadastrarFilme() {
-        CadastroFilmeRequest request = new CadastroFilmeRequest("Matrix", "Uma história", 1999, "poster", List.of("Ação"), 8160);
+        CadastroFilmeRequest request = new CadastroFilmeRequest("Matrix", "Uma história", LocalDate.now(), "poster", List.of("Ação"), 8160);
 
         FilmeResponse response = filmeService.cadastrar(request);
 
@@ -46,7 +47,7 @@ class FilmeServiceTest {
     void deveAtualizarFilmeExistente() {
         Filme filme = Filme.builder().titulo("Antigo").status(StatusMidia.ATIVA).build();
         Filme salvo = filmeRepository.save(filme);
-        AtualizarFilmeRequest request = new AtualizarFilmeRequest("Novo", "Sinopse nova", 2024, "novo-poster", List.of("Drama"), 7200);
+        AtualizarFilmeRequest request = new AtualizarFilmeRequest("Novo", "Sinopse nova", LocalDate.now(), "novo-poster", List.of("Drama"), 7200);
 
         FilmeResponse response = filmeService.atualizar(salvo.getMidiaId(), request);
 

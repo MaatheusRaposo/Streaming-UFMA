@@ -2,6 +2,7 @@ package com.lab_prog.streaming.model.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,8 @@ import com.lab_prog.streaming.repositories.ProgressoVisualizacaoRepository;
 
 @DataJpaTest
 class RepositoriesIntegrationTest {
+    
+    LocalDate agora = LocalDate.now();
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -89,7 +92,7 @@ class RepositoriesIntegrationTest {
         Filme filme = Filme.builder()
                 .titulo("O Poderoso Chefão")
                 .sinopse("A história da família Corleone...")
-                .anoLancamento(1972)
+                .dataLancamento(agora)
                 .duracaoSegundos(10500)
                 .generos(List.of("Crime", "Drama"))
                 .build();
@@ -109,7 +112,7 @@ class RepositoriesIntegrationTest {
         Serie serie = Serie.builder()
                 .titulo("Stranger Things")
                 .sinopse("Um garoto desaparece em Hawkins...")
-                .anoLancamento(2016)
+                .dataLancamento(agora)
                 .totalTemporadas(4)
                 .generos(List.of("Ficção Científica", "Terror"))
                 .build();

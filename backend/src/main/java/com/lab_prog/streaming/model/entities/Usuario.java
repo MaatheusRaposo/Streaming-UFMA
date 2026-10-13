@@ -35,4 +35,10 @@ public class Usuario {
     @Column(name = "senha_hash", nullable = false, length = 255)
     private String senhaHash;
 
+    public Usuario(String nome, String email, String senha){
+        this.nome = nome;
+        this.email = email;
+        this.senhaHash = senha;
+    }
+
 }
