@@ -26,6 +26,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
@@ -62,11 +63,13 @@ public class UsuarioController {
     }
     
     @PostMapping("/logout")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> logout() {
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<UsuarioResponse> buscarPerfil(
             Authentication authentication) {
 
@@ -78,6 +81,7 @@ public class UsuarioController {
     }
 
     @PutMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<UsuarioResponse> atualizarPerfil(
             @Valid @RequestBody AtualizarPerfilRequest request,
             Authentication authentication) {
@@ -91,6 +95,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> excluirConta(
             Authentication authentication) {
 
@@ -102,6 +107,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/me/password")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> alterarSenha( 
             @Valid @RequestBody AlterarSenhaRequest request,
             Authentication authentication) {
