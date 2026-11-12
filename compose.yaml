@@ -20,6 +20,7 @@ services:
       - "3000:3000"
     environment:
       WATCHPACK_POLLING: "true"
+      API_URL: "http://backend:8080"
     depends_on:
       - backend
     develop:
