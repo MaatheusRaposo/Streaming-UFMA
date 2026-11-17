@@ -1,24 +1,9 @@
 import Link from "next/link";
 import CatalogoGrade from "@/components/CatalogoGrade";
-import { getMidias } from "@/lib/api";
-import { midiasExemplo } from "@/lib/mock-midias";
-import { Midia } from "@/types/midia";
-
-async function carregarMidias(): Promise<{ midias: Midia[]; usandoExemplo: boolean }> {
-  try {
-    const midias = await getMidias()
-    if (midias.length > 0) {
-      return { midias, usandoExemplo: false }
-    }
-  } catch (erro) {
-    console.error(erro)
-  }
-
-  return { midias: midiasExemplo, usandoExemplo: true }
-}
+import { carregarMidias } from "@/lib/carregar-midias";
 
 export default async function CatalogoPage() {
-  const { midias, usandoExemplo } = await carregarMidias()
+  const { midias } = await carregarMidias()
 
   return (
     <main className="min-h-screen bg-[#1b1018] text-[#fff9f3]">

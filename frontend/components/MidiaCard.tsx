@@ -1,10 +1,6 @@
+import Link from "next/link";
+import { rotuloTipo } from "@/lib/formatar";
 import { Midia } from "@/types/midia";
-
-const rotulosTipo: Record<string, string> = {
-    Filme: "Filme",
-    Serie: "Série",
-    Episodio: "Episódio",
-}
 
 type Props = {
     midia: Midia
@@ -13,10 +9,14 @@ type Props = {
 export default function MidiaCard({ midia }: Props) {
     const ano = midia.dataLancamento.slice(0, 4)
     const genero = midia.generos[0]
-    const rotulo = rotulosTipo[midia.tipo] ?? midia.tipo
+    const rotulo = rotuloTipo(midia.tipo)
 
     return (
-        <article className="group">
+        <Link
+            href={`/catalogo/${midia.midiaId}`}
+            aria-label={`Conhecer ${midia.titulo}, ${rotulo} de ${ano}`}
+            className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#ffcb70] focus-visible:ring-offset-4 focus-visible:ring-offset-[#1b1018]"
+        >
             <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#321a29] shadow-lg ring-1 ring-inset ring-[#e9bd79]/20 transition-transform duration-200 group-hover:-translate-y-1">
                 {midia.urlPoster ? (
                     <img
@@ -41,6 +41,6 @@ export default function MidiaCard({ midia }: Props) {
                 {ano}
                 {genero && ` · ${genero}`}
             </p>
-        </article>
+        </Link>
     )
 }
