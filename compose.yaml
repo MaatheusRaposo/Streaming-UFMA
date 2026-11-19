@@ -38,3 +38,16 @@ services:
           path: ./frontend/pnpm-lock.yaml
         - action: rebuild
           path: ./frontend/pnpm-workspace.yaml
+
+  crawler:
+    build: ./crawler
+    env_file: .env
+    develop:
+      watch:
+        - action: rebuild
+          path: ./crawler
+          ignore:
+            - data/
+            - .auth/
+            - .venv/
+            - "**/__pycache__/"
