@@ -1,0 +1,1 @@
+export { default } from "@/app/catalogo/[id]/not-found";
