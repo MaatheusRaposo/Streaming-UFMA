@@ -13,7 +13,7 @@ def main() -> int:
         return 1
 
     print(f"UIRA_BASE_URL: {config.base_url}")
-    print("UIRA_USERNAME e UIRA_PASSWORD: definidos")
+    print("UIRA_PASSWORD: definida")
 
     # Por enquanto só testa se o UIRA responde; login e extração vêm depois da descoberta.
     try:

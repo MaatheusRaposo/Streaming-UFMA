@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # .env da raiz do repositório. No Docker ele não existe: o Compose já passa as variáveis.
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 
-OBRIGATORIAS = ("UIRA_BASE_URL", "UIRA_USERNAME", "UIRA_PASSWORD")
+OBRIGATORIAS = ("UIRA_BASE_URL", "UIRA_PASSWORD")
 
 
 class ConfigInvalida(Exception):
@@ -18,7 +18,6 @@ class ConfigInvalida(Exception):
 @dataclass(frozen=True)
 class Config:
     base_url: str
-    username: str = field(repr=False)
     password: str = field(repr=False)
 
 
@@ -37,6 +36,5 @@ def carregar_config() -> Config:
 
     return Config(
         base_url=base_url,
-        username=os.environ["UIRA_USERNAME"].strip(),
         password=os.environ["UIRA_PASSWORD"],
     )
