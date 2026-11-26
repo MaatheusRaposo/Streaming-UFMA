@@ -1,10 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  // A página inicial é o catálogo. Temporário (307) para o navegador não guardar o redirecionamento.
-  async redirects() {
-    return [{ source: "/", destination: "/catalogo", permanent: false }];
-  },
-};
+// A página inicial ("/") é decidida no proxy.ts: catálogo para quem está logado, login para quem não está.
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

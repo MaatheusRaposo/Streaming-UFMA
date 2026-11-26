@@ -36,6 +36,10 @@ O Compose constrói e inicia o backend e o frontend. Mantenha o comando rodando.
 - OpenAPI JSON: <http://localhost:8080/v3/api-docs>
 
 
+## Login no site
+
+O site exige login: quem não entrou é levado para `/login` (e, depois de entrar, volta para a página que tentou abrir). A conta é criada em `/cadastro`. A sessão fica em dois cookies HttpOnly: o `accessToken` vale 15 minutos e o `refreshToken` 7 dias. Quando o primeiro vence, o `frontend/proxy.ts` pede um novo ao backend (`POST /usuario/refresh`) sem pedir a senha de novo. O botão **Sair** fica no topo do catálogo.
+
 ## Testar a API com Swagger
 
 Abra o Swagger UI e use `POST /usuario/register` para cadastrar uma conta, depois `POST /usuario/login` para obter o token de acesso. Clique em **Authorize** e informe o token para chamar as operações protegidas, identificadas pelo cadeado. O Swagger adiciona o prefixo `Bearer` automaticamente.

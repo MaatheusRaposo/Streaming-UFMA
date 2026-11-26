@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { enviarAuthParaBackend } from "@/lib/auth-server"
 import type { RespostaLogin } from "@/types/usuario"
-
-const DURACAO_ACCESS_TOKEN_SEGUNDOS = 15 * 60
-const DURACAO_REFRESH_TOKEN_SEGUNDOS = 7 * 24 * 60 * 60
+import {
+  COOKIE_ACCESS,
+  COOKIE_REFRESH,
+  DURACAO_ACCESS_SEGUNDOS as DURACAO_ACCESS_TOKEN_SEGUNDOS,
+  DURACAO_REFRESH_SEGUNDOS as DURACAO_REFRESH_TOKEN_SEGUNDOS,
+} from "@/lib/sessao"
 
 export async function POST(request: NextRequest) {
   let corpo: unknown
@@ -63,11 +66,11 @@ export async function POST(request: NextRequest) {
     secure: ehHttps,
   }
 
-  resposta.cookies.set("accessToken", accessToken, {
+  resposta.cookies.set(COOKIE_ACCESS, accessToken, {
     ...opcoesBaseCookie,
     maxAge: DURACAO_ACCESS_TOKEN_SEGUNDOS,
   })
-  resposta.cookies.set("refreshToken", refreshToken, {
+  resposta.cookies.set(COOKIE_REFRESH, refreshToken, {
     ...opcoesBaseCookie,
     maxAge: DURACAO_REFRESH_TOKEN_SEGUNDOS,
   })

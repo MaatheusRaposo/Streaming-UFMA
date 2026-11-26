@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import CampoFormulario from "@/components/CampoFormulario"
 import { fazerLogin } from "@/lib/auth"
+import { destinoSeguro } from "@/lib/destino"
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -16,9 +17,11 @@ interface Erros {
 
 interface LoginFormProps {
   contaCriada?: boolean
+  // Página que a pessoa tentou abrir antes de ser mandada para o login (vem do ?destino=)
+  destino?: string
 }
 
-export default function LoginForm({ contaCriada = false }: LoginFormProps) {
+export default function LoginForm({ contaCriada = false, destino }: LoginFormProps) {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
@@ -42,7 +45,7 @@ export default function LoginForm({ contaCriada = false }: LoginFormProps) {
     setEnviando(true)
     try {
       await fazerLogin({ email: email.trim(), senha })
-      router.push("/catalogo")
+      router.push(destinoSeguro(destino))
       router.refresh()
     } catch (e) {
       setErros({
