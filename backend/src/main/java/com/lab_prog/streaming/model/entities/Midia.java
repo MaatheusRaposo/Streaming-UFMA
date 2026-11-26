@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -84,7 +85,9 @@ public class Midia {
     @lombok.Builder.Default
     private long visualizacoes = 0L;
 
-    @ElementCollection 
+    // BatchSize: ao listar o catálogo, carrega os gêneros de até 500 mídias por consulta (em vez de uma por mídia)
+    @ElementCollection
+    @BatchSize(size = 500)
     private List<String> generos;
 
     @Enumerated(EnumType.STRING)

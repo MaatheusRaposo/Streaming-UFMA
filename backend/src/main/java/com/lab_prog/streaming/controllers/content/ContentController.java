@@ -4,7 +4,9 @@ package com.lab_prog.streaming.controllers.content;
 import com.lab_prog.streaming.dtos.midia.MidiaResponse;
 import com.lab_prog.streaming.services.MidiaService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +30,12 @@ public class ContentController {
     // GET /api/contents/{id}
     @GetMapping("/{id}")
     public MidiaResponse buscarPorId(@PathVariable UUID id) {
-        return midiaService.buscarPorId(id);
+        try {
+            return midiaService.buscarPorId(id);
+        } catch (IllegalArgumentException e) {
+            // Mídia inexistente ou inativa: 404 em vez de erro 500
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     // GET /api/contents/featured

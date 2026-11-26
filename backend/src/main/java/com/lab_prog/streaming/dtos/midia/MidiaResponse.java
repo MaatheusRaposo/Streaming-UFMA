@@ -2,6 +2,7 @@ package com.lab_prog.streaming.dtos.midia;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.lab_prog.streaming.model.entities.StatusMidia;
@@ -14,6 +15,12 @@ public record MidiaResponse(
         LocalDate dataLancamento,
         String urlPoster,
         List<String> generos,
-        StatusMidia status
+        StatusMidia status,
+        // Só para filmes e episódios (nulos em séries)
+        Integer duracaoSegundos,
+        String urlVideo,
+        String classificacaoIndicativa,
+        String uf,
+        Map<String, String> fichaTecnica
 ) {
 }

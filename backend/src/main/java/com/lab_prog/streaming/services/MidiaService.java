@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.lab_prog.streaming.dtos.midia.MidiaResponse;
+import com.lab_prog.streaming.model.entities.ConteudoAssistivel;
 import com.lab_prog.streaming.model.entities.Midia;
 import com.lab_prog.streaming.model.entities.StatusMidia;
 import com.lab_prog.streaming.repositories.MidiaRepository;
@@ -77,6 +78,7 @@ public class MidiaService {
     }
 
     private MidiaResponse converterParaResponse(Midia midia) {
+        ConteudoAssistivel conteudo = midia instanceof ConteudoAssistivel c ? c : null;
         return new MidiaResponse(
                 midia.getMidiaId(),
                 midia.getClass().getSimpleName(),
@@ -85,7 +87,12 @@ public class MidiaService {
                 midia.getDataLancamento(),
                 midia.getUrlPoster(),
                 midia.getGeneros(),
-                midia.getStatus()
+                midia.getStatus(),
+                conteudo == null ? null : conteudo.getDuracaoSegundos(),
+                conteudo == null ? null : conteudo.getUrl(),
+                midia.getClassificacaoIndicativa(),
+                midia.getUf(),
+                midia.getFichaTecnica()
         );
     }
 }
