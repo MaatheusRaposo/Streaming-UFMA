@@ -1,5 +1,6 @@
 package com.lab_prog.streaming.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,7 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.lab_prog.streaming.security.JwtAuthenticationFilter;
 
+// Só com servidor web: o importador do catálogo (profile "import") roda sem web e não precisa de segurança HTTP
 @Configuration
+@ConditionalOnWebApplication
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

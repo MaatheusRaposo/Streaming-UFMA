@@ -39,9 +39,27 @@ services:
         - action: rebuild
           path: ./frontend/pnpm-workspace.yaml
 
+  # Importa crawler/data/catalogo.jsonl para o banco e termina. Não sobe no `up`:
+  #   docker compose run --rm importador
+  importador:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: import
+      IMPORT_FILE: /data/catalogo.jsonl
+    volumes:
+      - ./crawler/data:/data:ro
+    profiles: ["sincronizar"]
+
   crawler:
     build: ./crawler
     env_file: .env
+    # Roda com o seu usuário, para os arquivos em crawler/data não ficarem com dono root
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./crawler/data:/app/data
     develop:
       watch:
         - action: rebuild
