@@ -13,6 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.lab_prog.streaming.config.PasswordConfig;
 import com.lab_prog.streaming.dtos.usuario.CadastroUsuarioRequest;
+import com.lab_prog.streaming.dtos.usuario.LoginRequest;
+import com.lab_prog.streaming.dtos.usuario.LoginResponse;
+import com.lab_prog.streaming.dtos.usuario.RefreshRequest;
 import com.lab_prog.streaming.dtos.usuario.UsuarioResponse;
 import com.lab_prog.streaming.model.entities.Usuario;
 import com.lab_prog.streaming.repositories.UsuarioRepository;
@@ -42,6 +45,31 @@ class UsuarioServiceTest {
         assertThat(response.email()).isEqualTo("maria@example.com");
         assertThat(usuarioSalvo.getSenhaHash()).isNotEqualTo("senha123");
         assertThat(passwordEncoder.matches("senha123", usuarioSalvo.getSenhaHash())).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve renovar o access token com um refresh token válido")
+    void deveRenovarAccessTokenComRefreshTokenValido() {
+        usuarioService.cadastrar(new CadastroUsuarioRequest("Ana", "ana@example.com", "senha123"));
+        LoginResponse login = usuarioService.login(new LoginRequest("ana@example.com", "senha123"));
+
+        LoginResponse renovado = usuarioService.refresh(new RefreshRequest(login.refreshToken()));
+
+        assertThat(renovado.accessToken()).isNotBlank();
+        assertThat(renovado.user().email()).isEqualTo("ana@example.com");
+    }
+
+    @Test
+    @DisplayName("Deve responder 401 para refresh token inválido ou que não é de refresh")
+    void deveRecusarRefreshTokenInvalido() {
+        usuarioService.cadastrar(new CadastroUsuarioRequest("Ana", "ana@example.com", "senha123"));
+        LoginResponse login = usuarioService.login(new LoginRequest("ana@example.com", "senha123"));
+
+        for (String token : new String[] { "nao-e-um-jwt", login.accessToken() }) {
+            assertThatThrownBy(() -> usuarioService.refresh(new RefreshRequest(token)))
+                    .isInstanceOfSatisfying(ResponseStatusException.class,
+                            ex -> assertThat(ex.getStatusCode().value()).isEqualTo(401));
+        }
     }
 
     @Test

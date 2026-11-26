@@ -18,6 +18,7 @@ import com.lab_prog.streaming.dtos.usuario.UsuarioResponse;
 import com.lab_prog.streaming.model.entities.Usuario;
 import com.lab_prog.streaming.repositories.UsuarioRepository;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -72,7 +73,13 @@ public class UsuarioService {
     }
 
     public LoginResponse refresh(RefreshRequest request){
-        String email = jwtService.validarRefreshToken(request.refreshToken());
+        String email;
+        try {
+            email = jwtService.validarRefreshToken(request.refreshToken());
+        } catch (JwtException | IllegalArgumentException e) {
+            // Token vencido, adulterado ou que não é de refresh: 401 (antes virava erro 500)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token inválido ou expirado");
+        }
 
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new ResponseStatusException(
