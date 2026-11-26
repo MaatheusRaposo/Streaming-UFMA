@@ -42,11 +42,12 @@ public class SecurityConfig {
                                 "/usuario/login",
                                 "/usuario/refresh")
                         .permitAll()
+                        .requestMatchers("/error")
+                        .permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/contents",
-                                "/contents/**",
-                                "/error")
+                                "/contents/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(
