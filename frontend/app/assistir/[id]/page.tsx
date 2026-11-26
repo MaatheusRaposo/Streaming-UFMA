@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import VideoPlayer from "@/components/VideoPlayer";
+import VideoPlayer, { PlayerCarregando } from "@/components/VideoPlayer";
 import { carregarMidia } from "@/lib/carregar-midias";
-import { rotuloTipo } from "@/lib/formatar";
-
-const VIDEO_DEMO = "https://media.w3.org/2010/05/sintel/trailer.mp4"
+import { consultarEmbed } from "@/lib/eduplay";
+import { anoDe, formatarDuracaoSegundos, rotuloTipo } from "@/lib/formatar";
+import { Midia } from "@/types/midia";
 
 type Props = {
   params: Promise<{ id: string }>
@@ -23,8 +25,9 @@ export default async function AssistirPage({ params }: Props) {
 
   if (!midia) notFound()
 
-  const ano = midia.dataLancamento.slice(0, 4)
+  const ano = anoDe(midia.dataLancamento)
   const rotulo = rotuloTipo(midia.tipo)
+  const duracao = formatarDuracaoSegundos(midia.duracaoSegundos)
   const linkDetalhes = `/catalogo/${midia.midiaId}`
 
   return (
@@ -41,18 +44,21 @@ export default async function AssistirPage({ params }: Props) {
             </Link>
             <h1 className="mt-1.5 text-xl font-extrabold tracking-tight sm:text-2xl">{midia.titulo}</h1>
             <p className="mt-1.5 text-xs text-[#d5bec8]">
-              {rotulo} · {ano}
+              {[rotulo, ano, duracao].filter(Boolean).join(" · ")}
             </p>
           </div>
         </div>
 
-        <VideoPlayer src={VIDEO_DEMO} titulo={midia.titulo} poster={midia.urlPoster} />
+        {/* A página aparece na hora; só o quadro do player espera a resposta do EduPlay */}
+        <Suspense fallback={<PlayerCarregando poster={midia.urlPoster} />}>
+          <PlayerDoFilme midia={midia} />
+        </Suspense>
 
         <div className="mx-auto mt-2 flex w-full max-w-[1120px] flex-col items-start justify-between gap-4 border-b border-[#604052] py-6 sm:flex-row sm:items-center">
           <div>
             <h2 className="text-xl font-bold tracking-tight">{midia.titulo}</h2>
             <p className="mt-1.5 text-[13px] text-[#d5bec8]">
-              {[...midia.generos, ano].join(" · ")}
+              {[...midia.generos, ano].filter(Boolean).join(" · ")}
             </p>
           </div>
 
@@ -66,6 +72,16 @@ export default async function AssistirPage({ params }: Props) {
       </section>
     </main>
   )
+}
+
+// O EduPlay só deixa embutir o vídeo nos domínios que o dono cadastrou: pergunta se o nosso está entre eles
+async function PlayerDoFilme({ midia }: { midia: Midia }) {
+  const cabecalhos = await headers()
+  const host = cabecalhos.get("x-forwarded-host") ?? cabecalhos.get("host") ?? "localhost:3000"
+  const protocolo = cabecalhos.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https")
+  const embed = await consultarEmbed(midia.urlVideo, `${protocolo}://${host}`)
+
+  return <VideoPlayer src={midia.urlVideo} titulo={midia.titulo} poster={midia.urlPoster} embed={embed} />
 }
 
 function IconeVoltar() {
