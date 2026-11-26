@@ -45,3 +45,28 @@ As rotas públicas de conteúdo podem ser chamadas sem autenticação, por exemp
 ## Banco de dados
 
 O Compose não inicia um PostgreSQL local: o backend conecta-se ao banco Supabase definido em `.env`. Na inicialização, Flyway executa as migrações pendentes e Hibernate valida o schema.
+
+## Catálogo do UIRA
+
+Os filmes vêm do [UIRA](https://uira.ufma.br), a plataforma de streaming atual da UFMA. Guardamos no nosso banco só os **dados** de cada filme (título, sinopse, ano, gênero, duração, ficha técnica…). O vídeo continua no EduPlay (RNP) e toca no player deles, embutido na página `/assistir`. Os pôsteres ficam no Supabase Storage (bucket `posters`).
+
+Variáveis no `.env` (veja o `.env.example`):
+
+- `UIRA_BASE_URL` e `UIRA_PASSWORD`: acesso ao UIRA (só senha)
+- `STORAGE_S3_ENDPOINT`, `STORAGE_S3_REGION`, `STORAGE_S3_ACCESS_KEY`, `STORAGE_S3_SECRET_KEY` e `STORAGE_BUCKET`: Supabase Storage, para os pôsteres. As chaves saem de *Storage → Settings → S3 Access Keys*.
+
+Para puxar o catálogo e gravar no banco:
+
+```bash
+./sincronizar-uira.sh             # catálogo inteiro (~8 min na primeira vez)
+./sincronizar-uira.sh --limit 20  # só os 20 primeiros, para testar
+```
+
+O script roda duas etapas, que também podem ser chamadas separadas:
+
+1. `docker compose run --rm crawler extrair`: lê o UIRA e a API pública do Guarnicê e grava `crawler/data/catalogo.jsonl`. Envia os pôsteres ao bucket. Faz no máximo 2 requisições por segundo ao UIRA e 4 à API, e tenta de novo com espera crescente se o servidor reclamar.
+2. `docker compose run --rm importador`: lê o `catalogo.jsonl` e cria ou atualiza os filmes no banco.
+
+Rodar de novo é seguro e rápido. O crawler só visita de novo a página e só reenvia o pôster dos filmes que mudaram, e o importador só regrava os filmes cujo conteúdo mudou. Nada é apagado: se o UIRA sair do ar ou tirar um filme, ele continua no nosso banco. Se o UIRA devolver um catálogo vazio ou bem menor que o da última vez, o crawler para sem alterar nada.
+
+No `docker compose up`, o serviço `crawler` só confere o acesso (login e quantidade de filmes) e termina. Ele não faz a extração completa.
