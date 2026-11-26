@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import MidiaCard from "@/components/MidiaCard";
 import { carregarMidia, carregarMidias } from "@/lib/carregar-midias";
-import { formatarData, rotuloTipo } from "@/lib/formatar";
-import { Midia } from "@/types/midia";
+import { anoDe, formatarDuracaoSegundos, ROTULOS_FICHA, rotuloTipo } from "@/lib/formatar";
+import { Midia, resumir } from "@/types/midia";
 
 type Props = {
     params: Promise<{ id: string }>
@@ -16,27 +16,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: midia ? `${midia.titulo} | UFMA Play` : "Produção não encontrada | UFMA Play" }
 }
 
+// Primeiro as do mesmo gênero, depois as do mesmo tipo. O ponto de partida varia com o id,
+// para cada página sugerir títulos diferentes em vez de sempre os mesmos seis.
 function buscarRelacionadas(midia: Midia, todas: Midia[]) {
-    return todas
-        .filter(
-            (m) =>
-                m.midiaId !== midia.midiaId &&
-                (m.tipo === midia.tipo || m.generos.some((g) => midia.generos.includes(g))),
-        )
-        .slice(0, 6)
+    const outras = todas.filter((m) => m.midiaId !== midia.midiaId)
+    const mesmoGenero = outras.filter((m) => m.generos.some((g) => midia.generos.includes(g)))
+    const ids = new Set(mesmoGenero.map((m) => m.midiaId))
+    const mesmoTipo = outras.filter((m) => m.tipo === midia.tipo && !ids.has(m.midiaId))
+
+    const semente = [...midia.midiaId].reduce((soma, c) => soma + c.charCodeAt(0), 0)
+    const girar = (lista: Midia[]) => {
+        if (lista.length === 0) return lista
+        const inicio = semente % lista.length
+        return [...lista.slice(inicio), ...lista.slice(0, inicio)]
+    }
+    return [...girar(mesmoGenero), ...girar(mesmoTipo)].slice(0, 6)
 }
 
 export default async function DetalhesMidiaPage({ params }: Props) {
     const { id } = await params
-    const { midias } = await carregarMidias()
-    const midia = midias.find((m) => m.midiaId === id)
+    // As duas buscas saem juntas: a mídia pedida e a lista para as sugestões
+    const [midia, { midias }] = await Promise.all([carregarMidia(id), carregarMidias()])
 
     if (!midia) notFound()
 
-    const ano = midia.dataLancamento.slice(0, 4)
+    const ano = anoDe(midia.dataLancamento)
     const rotulo = rotuloTipo(midia.tipo)
     const imagemFundo = midia.urlPoster
     const relacionadas = buscarRelacionadas(midia, midias)
+    const duracao = formatarDuracaoSegundos(midia.duracaoSegundos)
+    const ficha = ROTULOS_FICHA.filter(([chave]) => midia.fichaTecnica?.[chave]).map(
+        ([chave, rotuloFicha]) => [rotuloFicha, midia.fichaTecnica![chave]] as const,
+    )
 
     return (
         <main className="min-h-screen bg-[#1b1018] text-[#fff9f3]">
@@ -85,12 +96,23 @@ export default async function DetalhesMidiaPage({ params }: Props) {
                         </h1>
 
                         <div className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-[#f5e1e4]">
-                            <strong className="text-white">{ano}</strong>
+                            {ano && <strong className="text-white">{ano}</strong>}
                             {midia.generos.length > 0 && (
                                 <>
-                                    <Separador />
+                                    {ano && <Separador />}
                                     <span>{midia.generos.join(", ")}</span>
                                 </>
+                            )}
+                            {duracao && (
+                                <>
+                                    <Separador />
+                                    <span>{duracao}</span>
+                                </>
+                            )}
+                            {midia.classificacaoIndicativa && (
+                                <span className="rounded border border-[#f5e1e4]/40 px-1.5 py-0.5 text-[10px] font-extrabold">
+                                    {midia.classificacaoIndicativa}
+                                </span>
                             )}
                         </div>
 
@@ -124,6 +146,22 @@ export default async function DetalhesMidiaPage({ params }: Props) {
                         <p className="text-sm leading-[1.9] text-[#d5bec8]">
                             {midia.sinopse || "Sinopse ainda não cadastrada para esta produção."}
                         </p>
+
+                        {ficha.length > 0 && (
+                            <>
+                                <h2 className="mb-4 mt-10 text-2xl font-bold tracking-tight">Ficha técnica</h2>
+                                <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+                                    {ficha.map(([rotuloFicha, valor]) => (
+                                        <div key={rotuloFicha}>
+                                            <dt className="mb-1 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#b69ca8]">
+                                                {rotuloFicha}
+                                            </dt>
+                                            <dd className="text-sm leading-relaxed text-[#ead9df]">{valor}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            </>
+                        )}
                     </section>
 
                     <aside
@@ -132,7 +170,12 @@ export default async function DetalhesMidiaPage({ params }: Props) {
                     >
                         <Fato rotulo="Tipo" valor={rotulo} />
                         <Fato rotulo={midia.generos.length > 1 ? "Gêneros" : "Gênero"} valor={midia.generos.join(", ") || "—"} />
-                        <Fato rotulo="Lançamento" valor={formatarData(midia.dataLancamento)} />
+                        <Fato rotulo="Ano" valor={ano || "—"} />
+                        {duracao && <Fato rotulo="Duração" valor={duracao} />}
+                        {midia.classificacaoIndicativa && (
+                            <Fato rotulo="Classificação" valor={midia.classificacaoIndicativa === "AL" ? "Livre (AL)" : midia.classificacaoIndicativa} />
+                        )}
+                        {midia.uf && <Fato rotulo="Estado (UF)" valor={midia.uf} />}
                     </aside>
                 </div>
 
@@ -147,7 +190,7 @@ export default async function DetalhesMidiaPage({ params }: Props) {
 
                         <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-7 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                             {relacionadas.map((m) => (
-                                <MidiaCard key={m.midiaId} midia={m} />
+                                <MidiaCard key={m.midiaId} midia={resumir(m)} />
                             ))}
                         </div>
                     </section>

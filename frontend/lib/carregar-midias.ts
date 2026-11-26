@@ -1,4 +1,4 @@
-import { getMidias } from "@/lib/api";
+import { getMidia, getMidias } from "@/lib/api";
 import { midiasExemplo } from "@/lib/mock-midias";
 import { Midia } from "@/types/midia";
 
@@ -15,7 +15,13 @@ export async function carregarMidias(): Promise<{ midias: Midia[]; usandoExemplo
   return { midias: midiasExemplo, usandoExemplo: true }
 }
 
+// Busca só a mídia pedida; se o backend estiver fora, procura nos dados de exemplo
 export async function carregarMidia(id: string): Promise<Midia | undefined> {
-  const { midias } = await carregarMidias()
-  return midias.find((m) => m.midiaId === id)
+  try {
+    const midia = await getMidia(id)
+    if (midia) return midia
+  } catch (erro) {
+    console.error(erro)
+  }
+  return midiasExemplo.find((m) => m.midiaId === id)
 }
